@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<!--
+  ============================================================================
+  DECK · MODELOS DE IA DO TIPO "SISTEMA 1" — Minicurso SECCOM 2026
+  ============================================================================
+  Sistema visual: Stone PPT (Brand Center de Marketing).
+  Cada slide é um bloco SECTION com a classe "slide", precedido de um
+  comentário que identifica o nome do layout usado.
+
+  LOGOS OFICIAIS: as classes .stone-logo são preenchidas pelo CSS com os SVGs
+  oficiais injetados no lugar do marcador de logos, dentro do bloco de estilos.
+  NÃO apague o marcador e NÃO desenhe símbolo aproximado.
+  ============================================================================
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelos de IA do tipo "Sistema 1" · Stone · SECCOM UFSC 2026</title>
+
+  <!-- Única dependência externa permitida: Google Fonts (Manrope 400/600/700/800) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ======================================================================
+       DESIGN SYSTEM — VARIÁVEIS
+       ====================================================================== */
+    :root{
+      --verde-principal: #00D700;
+      --verde-escuro:    #00461E;
+      --verde-claro:     #87FF4B;
+      --verde-escuro2:   #007D00;
+      --branco:          #FFFFFF;
+
+      --placeholder-img: #2c5a3f;
+
+      --font-base: 'Manrope','Inter','Helvetica Neue',Arial,sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, 'Cascadia Mono', 'Roboto Mono', Menlo, Consolas, 'Courier New', monospace;
+
+      --radius: 32px;
+
+      --stage-w: 1280px;
+      --stage-h: 720px;
+    }
+
+    /* ======================================================================
+       RESET / BASE
+       ====================================================================== */
+    *{ box-sizing: border-box; margin: 0; padding: 0; }
+
+    html,body{ height: 100%; }
+
+    body{
+      font-family: var(--font-base);
+      background: var(--verde-escuro);
+      color: var(--branco);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ======================================================================
+       PALCO / VIEWPORT DOS SLIDES
+       ====================================================================== */
+    .deck{
+      position: relative;
+      width: min(100vw, calc(100vh * 16 / 9));
+      height: min(100vh, calc(100vw * 9 / 16));
+    }
+
+    .slide{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      container-type: size;
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .45s ease;
+
+      display: flex;
+      flex-direction: column;
+      padding: clamp(2rem, 5vw, 4.5rem);
+    }
+
+    .slide.active{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* ======================================================================
+       FUNDOS / CONTRASTE
+       ====================================================================== */
+    .bg-principal{ background: var(--verde-principal); color: var(--verde-escuro); }
+    .bg-escuro   { background: var(--verde-escuro);    color: var(--branco); }
+    .bg-claro    { background: var(--verde-claro);     color: var(--verde-escuro); }
+    .bg-branco   { background: var(--branco);          color: var(--verde-escuro); }
+    .bg-gradiente{
+      background: linear-gradient(135deg, var(--verde-claro) 0%, var(--verde-principal) 55%, var(--verde-escuro2) 100%);
+      color: var(--verde-escuro);
+    }
+
+    /* ======================================================================
+       TIPOGRAFIA
+       ====================================================================== */
+    .kicker{
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .titulo-massivo{
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: -.02em;
+    }
+    .titulo-massivo--sm{
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: .98;
+      letter-spacing: -.02em;
+    }
+    .titulo-capitulo{
+      font-size: clamp(2.75rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: .98;
+      letter-spacing: -.02em;
+    }
+    .titulo-slide{
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.01em;
+    }
+    .titulo-medio{
+      font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.01em;
+    }
+    .subtitulo{
+      font-size: clamp(1.5rem, 2.2vw, 2rem);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .corpo{
+      font-size: clamp(1rem, 1.2vw, 1.25rem);
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    .numero-gigante{
+      font-size: clamp(5rem, 15vw, 12rem);
+      font-weight: 800;
+      line-height: .9;
+      letter-spacing: -.03em;
+    }
+    .numero-medio{
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.02em;
+    }
+    .mono{ font-family: var(--font-mono); }
+    strong, b{ font-weight: 800; }
+
+    /* ======================================================================
+       LOGOS OFICIAIS DA STONE (Brand Center)
+       tipo: simbolo | logotipo        cor: verde | verde-escuro | branco
+       Cor pelo fundo: principal/claro/branco -> verde-escuro; escuro -> verde
+       ====================================================================== */
+    /* STONE-LOGOS:BEGIN (gerado por stone_logos.py, nao editar) */
+.stone-logo{display:inline-block;flex:none;line-height:0;background-repeat:no-repeat;background-position:center;background-size:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.stone-logo.simbolo{aspect-ratio:1/1;}
+.stone-logo.logotipo{aspect-ratio:1005/269;}
+.stone-logo.logotipo.verde{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTAwNS4xMTc2NiAyNjkiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50LTIpOwogICAgICB9CgogICAgICAuY2xzLTIgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50KTsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjMDBkNzAwOwogICAgICB9CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQiIHgxPSItOTU1MS4xMDYxMiIgeTE9IjQ1NDQuNTA5MDQiIHgyPSItOTQ5NC45ODYyNSIgeTI9IjQ2MDAuNjI4OTEiIGdyYWRpZW50VHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTkxNTEuMDExMTEgLTQ0NjcuOTUwMikgcm90YXRlKC0xODApIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMTQ0MDIiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjE2MTAyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjM2Nzc5IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9Ii41MTcwOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41NTI4OCIgc3RvcC1jb2xvcj0iIzAwZDcwMCIgc3RvcC1vcGFjaXR5PSIuNzc3OTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjg5NzkiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjkzOTA5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MzU2IiBzdG9wLWNvbG9yPSIjMDBkNzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9Ii0xMjA0My43MTc1NSIgeTE9IjUwNDUuNTY5NzIiIHgyPSItMTE5ODguNDk3MzQiIHkyPSI1MTAwLjc4OTkzIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDEyNTA5Ljg3NTk5IDUyNzcuOTQwMzQpIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMTQzNjMiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjE2MTAyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjM2NjQ2IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9Ii41MTcwOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41NTA3NyIgc3RvcC1jb2xvcj0iIzAwZDcwMCIgc3RvcC1vcGFjaXR5PSIuNzc3OTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjg3MTEiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjkzOTA5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MDU3IiBzdG9wLWNvbG9yPSIjMDBkNzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik04LjMwMjQsMTg5LjE4Mjk3aDUwLjk4YzIuMTIsMTkuMTIwMDEsMTYuOTksMzEuMDA5OTksMzkuMDksMzEuMDA5OTksMTguMjcsMCwzMS4wMDk5OS04LjkyMDAxLDMxLjAwOTk5LTIwLjgyMDAxLDAtNDMuNzU5OTktMTE1LjE0LS44NTAwMS0xMTUuMTQtOTAuOTIsMC0zNy44MSwzMi43MS02NC41OCw3Ni40Ny02NC41OCw1MS40MSwwLDg2LjI1LDI3LjYyLDg4LjM3LDY5LjY3OTk5aC01MS40MWMtMi41NS0xOC4yNy0xOS4xMi0yOC4wNDAwMS0zNS4yNTk5OS0yOC4wNDAwMXMtMjguMDQsNy4yMi0yOC4wNCwyMC44MjAwMWMwLDQzLjc1OTk5LDExNy4yNi01Ljk1LDExNy4yNiw5MC45MjAwMSwwLDQwLjc5MDAxLTMzLjE0LDY3LjU0OTk5LTgzLjI3LDY3LjU0OTk5UzEwLjQxMjM5LDIzNS40ODI5NCw4LjI5MjM5LDE4OS4xODI5NWwuMDEwMDIuMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNOTkzLjE4MjM2LDE4OC43NTI5N2MtOC41LDQ2LjMxMDAxLTQ5LjI4MDAzLDc2LjA1LTEwMS45Njk5Nyw3Ni4wNS03Mi42NTAwMiwwLTExMC4wMzk5OC01Ni45Mjk5OS0xMTAuMDM5OTgtMTEwLjg5czMzLjE0MDAxLTExMC4wNCwxMDUuNzg5OTgtMTEwLjA0LDEwNS43OTAwNCw1NS42NiwxMDUuNzkwMDQsMTA0LjUxYzAsOC4wNjk5OS0uNDIwMDQsMTQuNDQtLjg0OTk4LDE5LjEyaC0xNTMuNzk5OTljNC4yNSwzMC4xNTk5OSwyMy4zNyw0OC44Niw1My4xMDk5OSw0OC44NiwyMy43ODk5OCwwLDM5LjUxMDAxLTkuMzUwMDEsNDQuMTc5OTktMjcuNjJoNTcuNzgwMDNsLjAwOTg5LjAwOTk5Wk04MzguOTUyMzgsMTMwLjEyMjk3aDk0LjczOTk5Yy0xLjcwMDAxLTIzLjc4OTk5LTE4LjI3MDAyLTQyLjkxLTQ2LjcyOTk4LTQyLjkxLTI2Ljc3MDAyLDAtNDIuOTA5OTcsMTMuMTctNDguMDEwMDEsNDIuOTFaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNjYyLjA5MjQsNDMuODgyOTdjLTc0LjAzOTk4LDAtMTAwLjY5LDQ4LjI3OTk5LTEwMC42OSw5My40M3YxMjQuMDk5OTloNTkuNDc5OThWMTA3LjM0Mjk1YzAtNS45NjAwMSw0LjgzMDAyLTEwLjc4OTk5LDEwLjc4OTk4LTEwLjc4OTk5aDYwLjg0OTk4YzUuOTYwMDIsMCwxMC43ODk5OCw0LjgzLDEwLjc4OTk4LDEwLjc4OTk5djE1NC4wNzAwMWg1OS40Nzk5OHYtMTI0LjEwMDAxYzAtNDUuMTQ5OTktMjYuNjUwMDItOTMuNDMtMTAwLjY5LTkzLjQzbC0uMDA5ODkuMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMzE3LjEzMjQsNDcuMjgyOTdoLTU3LjM2MDAyVjQuMTMyOTdoLTU5LjA1djE3OS41MjAwMWMwLDQ5LjcwOTk5LDMxLjg2LDc3Ljc1LDgxLjE1MDAxLDc3Ljc1aDM1LjI2MDAxdi00OS43MDk5OWwtNDYuNDI5OTktLjI2MDAxYy01Ljk1OTk5LDAtMTAuNzkwMDEtNC44Mjk5OS0xMC43OTAwMS0xMC43OTAwMWwtLjE0MDAxLTEwNC4wOWg1Ny4zNTk5OXYtNDkuMjhsLjAwMDAzLjAwOTk5WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTQzMy4xODIzOSwyMjQuMzEyOTlsLTYyLjI2OTk5LTYyLjI3Yy00LjE3MDAxLTQuMTctNC4yMDAwMS0xMC44OS0uMTMtMTUuMTJsLTQ1Ljg1OTk5LTE0LjUzYy0yLjA2LDEwLjE5LTIuNzMwMDEsMjAuODktMS43NjAwMSwzMS44OSw0LjczOTk5LDUzLjk3LDQ4LjgzMDAyLDk2Ljk1OTk5LDEwMi44OTk5OSwxMDAuMzU5OTksMzAuNTcwMDEsMS45MjAwMSw1OC42Ni04LjYyLDc5LjcwOTk5LTI3LC45NTAwMS0uODI5OTktLjA3MDAxLTIuMzIwMDEtMS4xNjk5OC0xLjczMDAxLTcuMDEwMDEsMy43OC0xNi42OSw2LjkyMDAxLTI5LjQ4MDAxLDYuOTIwMDEtMjQuNTQwMDEsMC00MS45NC0xOC41MTAwMS00MS45NC0xOC41MTAwMXYtLjAwOTk4WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTQzMy4xODIzOSw0My45MzI5N2MtMjcuODI5OTksMC01My4yMzk5OSwxMC4zLTcyLjY2LDI3LjI5LS45NC44MjAwMS4wOSwyLjMxLDEuMTksMS43MTAwMSw3LjAxOTk5LTMuNzg5OTksMTYuNzItNi45NSwyOS41NDAwMS02Ljk1LDI1LjczOTk5LDAsNDEuOTI5OTksMTguNSw0MS45Mjk5OSwxOC41bDYyLjI2OTk5LDYyLjI3YzQuMjEwMDIsNC4yMTAwMSw0LjIxOTk3LDExLjAzOTk5LjAyMDAyLDE1LjI1OTk5bDQ1LjQxOTk4LDE2LjgzYzEuNzgwMDMtNy44NywyLjc1LTE2LjA0MDAxLDIuNzUtMjQuNDUsMC02MS4wMDk5OS00OS40NjAwMi0xMTAuNDYtMTEwLjQ1OTk5LTExMC40NnYtLjAwMDAyWiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM3MC43ODI0LDE0Ni45MjI5OWwuMDczODYtLjA3NTU0LDQ5LjkwMTU1LTQ5Ljk1MzJzLTE2LjE2OTU1LTE4LjQ2NjY1LTQxLjg3NzA0LTE4LjQ2NjY1Yy02MC42MTMzNSwwLTU2LjAzOTE1LDgwLjk5NzU4LTU2LjAzOTE1LDgwLjk5NzU4Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNDk1LjQ3MzQsMTYyLjAxMDU4bC0uMDczODYuMDc1NTQtNDkuOTA3MTMsNDkuOTQ1ODhzMTYuMTY5NTUsMTguNDY2NjUsNDEuODc3MDQsMTguNDY2NjVjNjAuNjEzMzUsMCw1Ni4wMzkxNS04MC45OTc1OCw1Ni4wMzkxNS04MC45OTc1OCIvPgo8L3N2Zz4=");}
+.stone-logo.logotipo.verde-escuro{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTAwNS4xMTc2NiAyNjkiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50LTIpOwogICAgICB9CgogICAgICAuY2xzLTIgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50KTsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjMDA0NjFlOwogICAgICB9CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQiIHgxPSItOTU1MS4xMDYxMiIgeTE9IjQ1NDQuNTA5MDQiIHgyPSItOTQ5NC45ODYyNSIgeTI9IjQ2MDAuNjI4OTEiIGdyYWRpZW50VHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTkxNTEuMDExMTEgLTQ0NjcuOTUwMikgcm90YXRlKC0xODApIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjMDA0NjFlIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMjQyOTUiIHN0b3AtY29sb3I9IiMwMDQ2MWUiIHN0b3Atb3BhY2l0eT0iLjMyMjk0Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjU4MDY4IiBzdG9wLWNvbG9yPSIjMDA0NjFlIiBzdG9wLW9wYWNpdHk9Ii44MTM1MSIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii43NjM1NiIgc3RvcC1jb2xvcj0iIzAwNDYxZSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50LTIiIHgxPSItMTIwNDMuNzE3NTUiIHkxPSI1MDQ1LjU2OTcyIiB4Mj0iLTExOTg4LjQ5NzM0IiB5Mj0iNTEwMC43ODk5MyIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjUwOS44NzU5OSA1Mjc3Ljk0MDM0KSBzY2FsZSgxIC0xKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4wNDkxNyIgc3RvcC1jb2xvcj0iIzAwNDYxZSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjI0MjE0IiBzdG9wLWNvbG9yPSIjMDA0NjFlIiBzdG9wLW9wYWNpdHk9Ii4zMjI5NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41Nzg0NiIgc3RvcC1jb2xvcj0iIzAwNDYxZSIgc3RvcC1vcGFjaXR5PSIuODEzNTEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNzYwNTciIHN0b3AtY29sb3I9IiMwMDQ2MWUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTguMzAyNCwxODkuMTgyOTdoNTAuOThjMi4xMiwxOS4xMjAwMSwxNi45OSwzMS4wMDk5OSwzOS4wOSwzMS4wMDk5OSwxOC4yNywwLDMxLjAwOTk5LTguOTIwMDEsMzEuMDA5OTktMjAuODIwMDEsMC00My43NTk5OS0xMTUuMTQtLjg1MDAxLTExNS4xNC05MC45MiwwLTM3LjgxLDMyLjcxLTY0LjU4LDc2LjQ3LTY0LjU4LDUxLjQxLDAsODYuMjUsMjcuNjIsODguMzcsNjkuNjc5OTloLTUxLjQxYy0yLjU1LTE4LjI3LTE5LjEyLTI4LjA0MDAxLTM1LjI1OTk5LTI4LjA0MDAxcy0yOC4wNCw3LjIyLTI4LjA0LDIwLjgyMDAxYzAsNDMuNzU5OTksMTE3LjI2LTUuOTUsMTE3LjI2LDkwLjkyMDAxLDAsNDAuNzkwMDEtMzMuMTQsNjcuNTQ5OTktODMuMjcsNjcuNTQ5OTlTMTAuNDEyMzksMjM1LjQ4Mjk0LDguMjkyMzksMTg5LjE4Mjk1bC4wMTAwMi4wMDAwMloiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik05OTMuMTgyMzYsMTg4Ljc1Mjk3Yy04LjUsNDYuMzEwMDEtNDkuMjgwMDMsNzYuMDUtMTAxLjk2OTk3LDc2LjA1LTcyLjY1MDAyLDAtMTEwLjAzOTk4LTU2LjkyOTk5LTExMC4wMzk5OC0xMTAuODlzMzMuMTQwMDEtMTEwLjA0LDEwNS43ODk5OC0xMTAuMDQsMTA1Ljc5MDA0LDU1LjY2LDEwNS43OTAwNCwxMDQuNTFjMCw4LjA2OTk5LS40MjAwNCwxNC40NC0uODQ5OTgsMTkuMTJoLTE1My43OTk5OWM0LjI1LDMwLjE1OTk5LDIzLjM3LDQ4Ljg2LDUzLjEwOTk5LDQ4Ljg2LDIzLjc4OTk4LDAsMzkuNTEwMDEtOS4zNTAwMSw0NC4xNzk5OS0yNy42Mmg1Ny43ODAwM2wuMDA5ODkuMDA5OTlaTTgzOC45NTIzOCwxMzAuMTIyOTdoOTQuNzM5OTljLTEuNzAwMDEtMjMuNzg5OTktMTguMjcwMDItNDIuOTEtNDYuNzI5OTgtNDIuOTEtMjYuNzcwMDIsMC00Mi45MDk5NywxMy4xNy00OC4wMTAwMSw0Mi45MVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik02NjIuMDkyNCw0My44ODI5N2MtNzQuMDM5OTgsMC0xMDAuNjksNDguMjc5OTktMTAwLjY5LDkzLjQzdjEyNC4wOTk5OWg1OS40Nzk5OFYxMDcuMzQyOTVjMC01Ljk2MDAxLDQuODMwMDItMTAuNzg5OTksMTAuNzg5OTgtMTAuNzg5OTloNjAuODQ5OThjNS45NjAwMiwwLDEwLjc4OTk4LDQuODMsMTAuNzg5OTgsMTAuNzg5OTl2MTU0LjA3MDAxaDU5LjQ3OTk4di0xMjQuMTAwMDFjMC00NS4xNDk5OS0yNi42NTAwMi05My40My0xMDAuNjktOTMuNDNsLS4wMDk4OS4wMDAwMloiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0zMTcuMTMyNCw0Ny4yODI5N2gtNTcuMzYwMDJWNC4xMzI5N2gtNTkuMDV2MTc5LjUyMDAxYzAsNDkuNzA5OTksMzEuODYsNzcuNzUsODEuMTUwMDEsNzcuNzVoMzUuMjYwMDF2LTQ5LjcwOTk5bC00Ni40Mjk5OS0uMjYwMDFjLTUuOTU5OTksMC0xMC43OTAwMS00LjgyOTk5LTEwLjc5MDAxLTEwLjc5MDAxbC0uMTQwMDEtMTA0LjA5aDU3LjM1OTk5di00OS4yOGwuMDAwMDMuMDA5OTlaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNDMzLjE4MjM5LDIyNC4zMTI5OWwtNjIuMjY5OTktNjIuMjdjLTQuMTcwMDEtNC4xNy00LjIwMDAxLTEwLjg5LS4xMy0xNS4xMmwtNDUuODU5OTktMTQuNTNjLTIuMDYsMTAuMTktMi43MzAwMSwyMC44OS0xLjc2MDAxLDMxLjg5LDQuNzM5OTksNTMuOTcsNDguODMwMDIsOTYuOTU5OTksMTAyLjg5OTk5LDEwMC4zNTk5OSwzMC41NzAwMSwxLjkyMDAxLDU4LjY2LTguNjIsNzkuNzA5OTktMjcsLjk1MDAxLS44Mjk5OS0uMDcwMDEtMi4zMjAwMS0xLjE2OTk4LTEuNzMwMDEtNy4wMTAwMSwzLjc4LTE2LjY5LDYuOTIwMDEtMjkuNDgwMDEsNi45MjAwMS0yNC41NDAwMSwwLTQxLjk0LTE4LjUxMDAxLTQxLjk0LTE4LjUxMDAxdi0uMDA5OThaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNDMzLjE4MjM5LDQzLjkzMjk3Yy0yNy44Mjk5OSwwLTUzLjIzOTk5LDEwLjMtNzIuNjYsMjcuMjktLjk0LjgyMDAxLjA5LDIuMzEsMS4xOSwxLjcxMDAxLDcuMDE5OTktMy43ODk5OSwxNi43Mi02Ljk1LDI5LjU0MDAxLTYuOTUsMjUuNzM5OTksMCw0MS45Mjk5OSwxOC41LDQxLjkyOTk5LDE4LjVsNjIuMjY5OTksNjIuMjdjNC4yMTAwMiw0LjIxMDAxLDQuMjE5OTcsMTEuMDM5OTkuMDIwMDIsMTUuMjU5OTlsNDUuNDE5OTgsMTYuODNjMS43ODAwMy03Ljg3LDIuNzUtMTYuMDQwMDEsMi43NS0yNC40NSwwLTYxLjAwOTk5LTQ5LjQ2MDAyLTExMC40Ni0xMTAuNDU5OTktMTEwLjQ2di0uMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMzcwLjc4MjQsMTQ2LjkyMjk5bC4wNzM4Ni0uMDc1NTQsNDkuOTAxNTUtNDkuOTUzMnMtMTYuMTY5NTUtMTguNDY2NjUtNDEuODc3MDQtMTguNDY2NjVjLTYwLjYxMzM1LDAtNTYuMDM5MTUsODAuOTk3NTgtNTYuMDM5MTUsODAuOTk3NTgiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik00OTUuNDczNCwxNjIuMDEwNThsLS4wNzM4Ni4wNzU1NC00OS45MDcxMyw0OS45NDU4OHMxNi4xNjk1NSwxOC40NjY2NSw0MS44NzcwNCwxOC40NjY2NWM2MC42MTMzNSwwLDU2LjAzOTE1LTgwLjk5NzU4LDU2LjAzOTE1LTgwLjk5NzU4Ii8+Cjwvc3ZnPg==");}
+.stone-logo.logotipo.branco{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTAwNS4xMTc2NiAyNjkiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50LTIpOwogICAgICB9CgogICAgICAuY2xzLTIgewogICAgICAgIGZpbGw6IHVybCgjbGluZWFyLWdyYWRpZW50KTsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjZjVmZmY1OwogICAgICB9CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQiIHgxPSItOTU1MS4xMDYxMiIgeTE9IjQ1NDQuNTA5MDQiIHgyPSItOTQ5NC45ODYyNSIgeTI9IjQ2MDAuNjI4OTEiIGdyYWRpZW50VHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTkxNTEuMDExMTEgLTQ0NjcuOTUwMikgcm90YXRlKC0xODApIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMjI0MDIiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjI5MjQ3Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjQxODc1IiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii41OTI1MyIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41ODAwNSIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIuODEyNzIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjk5MzMiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjk0ODY1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MzU2IiBzdG9wLWNvbG9yPSIjZjVmZmY1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9Ii0xMjA0My43MTc1NSIgeTE9IjUwNDUuNTY5NzIiIHgyPSItMTE5ODguNDk3MzQiIHkyPSI1MTAwLjc4OTkzIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDEyNTA5Ljg3NTk5IDUyNzcuOTQwMzQpIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMjIzMjkiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjI5MjQ3Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjQxNzIxIiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii41OTI1MyIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41Nzc4MyIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIuODEyNzIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjk2NjEiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjk0ODY1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MDU3IiBzdG9wLWNvbG9yPSIjZjVmZmY1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik04LjMwMjQsMTg5LjE4Mjk3aDUwLjk4YzIuMTIsMTkuMTIwMDEsMTYuOTksMzEuMDA5OTksMzkuMDksMzEuMDA5OTksMTguMjcsMCwzMS4wMDk5OS04LjkyMDAxLDMxLjAwOTk5LTIwLjgyMDAxLDAtNDMuNzU5OTktMTE1LjE0LS44NTAwMS0xMTUuMTQtOTAuOTIsMC0zNy44MSwzMi43MS02NC41OCw3Ni40Ny02NC41OCw1MS40MSwwLDg2LjI1LDI3LjYyLDg4LjM3LDY5LjY3OTk5aC01MS40MWMtMi41NS0xOC4yNy0xOS4xMi0yOC4wNDAwMS0zNS4yNTk5OS0yOC4wNDAwMXMtMjguMDQsNy4yMi0yOC4wNCwyMC44MjAwMWMwLDQzLjc1OTk5LDExNy4yNi01Ljk1LDExNy4yNiw5MC45MjAwMSwwLDQwLjc5MDAxLTMzLjE0LDY3LjU0OTk5LTgzLjI3LDY3LjU0OTk5UzEwLjQxMjM5LDIzNS40ODI5NCw4LjI5MjM5LDE4OS4xODI5NWwuMDEwMDIuMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNOTkzLjE4MjM2LDE4OC43NTI5N2MtOC41LDQ2LjMxMDAxLTQ5LjI4MDAzLDc2LjA1LTEwMS45Njk5Nyw3Ni4wNS03Mi42NTAwMiwwLTExMC4wMzk5OC01Ni45Mjk5OS0xMTAuMDM5OTgtMTEwLjg5czMzLjE0MDAxLTExMC4wNCwxMDUuNzg5OTgtMTEwLjA0LDEwNS43OTAwNCw1NS42NiwxMDUuNzkwMDQsMTA0LjUxYzAsOC4wNjk5OS0uNDIwMDQsMTQuNDQtLjg0OTk4LDE5LjEyaC0xNTMuNzk5OTljNC4yNSwzMC4xNTk5OSwyMy4zNyw0OC44Niw1My4xMDk5OSw0OC44NiwyMy43ODk5OCwwLDM5LjUxMDAxLTkuMzUwMDEsNDQuMTc5OTktMjcuNjJoNTcuNzgwMDNsLjAwOTg5LjAwOTk5Wk04MzguOTUyMzgsMTMwLjEyMjk3aDk0LjczOTk5Yy0xLjcwMDAxLTIzLjc4OTk5LTE4LjI3MDAyLTQyLjkxLTQ2LjcyOTk4LTQyLjkxLTI2Ljc3MDAyLDAtNDIuOTA5OTcsMTMuMTctNDguMDEwMDEsNDIuOTFaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNNjYyLjA5MjQsNDMuODgyOTdjLTc0LjAzOTk4LDAtMTAwLjY5LDQ4LjI3OTk5LTEwMC42OSw5My40M3YxMjQuMDk5OTloNTkuNDc5OThWMTA3LjM0Mjk1YzAtNS45NjAwMSw0LjgzMDAyLTEwLjc4OTk5LDEwLjc4OTk4LTEwLjc4OTk5aDYwLjg0OTk4YzUuOTYwMDIsMCwxMC43ODk5OCw0LjgzLDEwLjc4OTk4LDEwLjc4OTk5djE1NC4wNzAwMWg1OS40Nzk5OHYtMTI0LjEwMDAxYzAtNDUuMTQ5OTktMjYuNjUwMDItOTMuNDMtMTAwLjY5LTkzLjQzbC0uMDA5ODkuMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMzE3LjEzMjQsNDcuMjgyOTdoLTU3LjM2MDAyVjQuMTMyOTdoLTU5LjA1djE3OS41MjAwMWMwLDQ5LjcwOTk5LDMxLjg2LDc3Ljc1LDgxLjE1MDAxLDc3Ljc1aDM1LjI2MDAxdi00OS43MDk5OWwtNDYuNDI5OTktLjI2MDAxYy01Ljk1OTk5LDAtMTAuNzkwMDEtNC44Mjk5OS0xMC43OTAwMS0xMC43OTAwMWwtLjE0MDAxLTEwNC4wOWg1Ny4zNTk5OXYtNDkuMjhsLjAwMDAzLjAwOTk5WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTQzMy4xODIzOSwyMjQuMzEyOTlsLTYyLjI2OTk5LTYyLjI3Yy00LjE3MDAxLTQuMTctNC4yMDAwMS0xMC44OS0uMTMtMTUuMTJsLTQ1Ljg1OTk5LTE0LjUzYy0yLjA2LDEwLjE5LTIuNzMwMDEsMjAuODktMS43NjAwMSwzMS44OSw0LjczOTk5LDUzLjk3LDQ4LjgzMDAyLDk2Ljk1OTk5LDEwMi44OTk5OSwxMDAuMzU5OTksMzAuNTcwMDEsMS45MjAwMSw1OC42Ni04LjYyLDc5LjcwOTk5LTI3LC45NTAwMS0uODI5OTktLjA3MDAxLTIuMzIwMDEtMS4xNjk5OC0xLjczMDAxLTcuMDEwMDEsMy43OC0xNi42OSw2LjkyMDAxLTI5LjQ4MDAxLDYuOTIwMDEtMjQuNTQwMDEsMC00MS45NC0xOC41MTAwMS00MS45NC0xOC41MTAwMXYtLjAwOTk4WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTQzMy4xODIzOSw0My45MzI5N2MtMjcuODI5OTksMC01My4yMzk5OSwxMC4zLTcyLjY2LDI3LjI5LS45NC44MjAwMS4wOSwyLjMxLDEuMTksMS43MTAwMSw3LjAxOTk5LTMuNzg5OTksMTYuNzItNi45NSwyOS41NDAwMS02Ljk1LDI1LjczOTk5LDAsNDEuOTI5OTksMTguNSw0MS45Mjk5OSwxOC41bDYyLjI2OTk5LDYyLjI3YzQuMjEwMDIsNC4yMTAwMSw0LjIxOTk3LDExLjAzOTk5LjAyMDAyLDE1LjI1OTk5bDQ1LjQxOTk4LDE2LjgzYzEuNzgwMDMtNy44NywyLjc1LTE2LjA0MDAxLDIuNzUtMjQuNDUsMC02MS4wMDk5OS00OS40NjAwMi0xMTAuNDYtMTEwLjQ1OTk5LTExMC40NnYtLjAwMDAyWiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTM3MC43ODI0LDE0Ni45MjI5OWwuMDczODYtLjA3NTU0LDQ5LjkwMTU1LTQ5Ljk1MzJzLTE2LjE2OTU1LTE4LjQ2NjY1LTQxLjg3NzA0LTE4LjQ2NjY1Yy02MC42MTMzNSwwLTU2LjAzOTE1LDgwLjk5NzU4LTU2LjAzOTE1LDgwLjk5NzU4Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNDk1LjQ3MzQsMTYyLjAxMDU4bC0uMDczODYuMDc1NTQtNDkuOTA3MTMsNDkuOTQ1ODhzMTYuMTY5NTUsMTguNDY2NjUsNDEuODc3MDQsMTguNDY2NjVjNjAuNjEzMzUsMCw1Ni4wMzkxNS04MC45OTc1OCw1Ni4wMzkxNS04MC45OTc1OCIvPgo8L3N2Zz4=");}
+.stone-logo.simbolo.verde{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQtMik7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQpOwogICAgICB9CgogICAgICAuY2xzLTMgewogICAgICAgIGZpbGw6ICMwMGQ3MDA7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhci1ncmFkaWVudCIgeDE9Ii05MjI0Ljg5MTA2IiB5MT0iNDU0MC4xMDkwNCIgeDI9Ii05MTY4Ljc3MTIiIHkyPSI0NTk2LjIyODkxIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKC05MTA3Ljk3OTk2IC00NDY3Ljk1MDIpIHJvdGF0ZSgtMTgwKSBzY2FsZSgxIC0xKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4wNjczIiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMTU5NzQiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjE2MTAyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjM3NzgzIiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9Ii41MTcwOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41NTgyMiIgc3RvcC1jb2xvcj0iIzAwZDcwMCIgc3RvcC1vcGFjaXR5PSIuNzc3OTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjkxNjYiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjkzOTA5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MzU2IiBzdG9wLWNvbG9yPSIjMDBkNzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJsaW5lYXItZ3JhZGllbnQtMiIgeDE9Ii0xMjMyNi45MDE0NSIgeTE9IjUwODAuOTY5NzIiIHgyPSItMTIyNzEuNjgxMjUiIHkyPSI1MTM2LjE4OTkzIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKDEyNTA5Ljg3NTk5IDUzMDguOTQwMzQpIHNjYWxlKDEgLTEpIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxzdG9wIG9mZnNldD0iLjA0OTE3IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMTQzNjMiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjE2MTAyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjM2NjQ2IiBzdG9wLWNvbG9yPSIjMDBkNzAwIiBzdG9wLW9wYWNpdHk9Ii41MTcwOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41NTA3NyIgc3RvcC1jb2xvcj0iIzAwZDcwMCIgc3RvcC1vcGFjaXR5PSIuNzc3OTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNjg3MTEiIHN0b3AtY29sb3I9IiMwMGQ3MDAiIHN0b3Atb3BhY2l0eT0iLjkzOTA5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MDU3IiBzdG9wLWNvbG9yPSIjMDBkNzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0xNDkuOTk4NDksMjE5LjkxMjk4bC02Mi4yNjk5OS02Mi4yN2MtNC4xNzAwMS00LjE3LTQuMjAwMDEtMTAuODktLjEzLTE1LjEybC00NS44NTk5OS0xNC41M2MtMi4wNiwxMC4xOS0yLjczMDAxLDIwLjg5LTEuNzYwMDEsMzEuODksNC43Mzk5OSw1My45Nyw0OC44MzAwMiw5Ni45NTk5OSwxMDIuODk5OTksMTAwLjM1OTk5LDMwLjU3MDAxLDEuOTIwMDEsNTguNjYtOC42Miw3OS43MDk5OS0yNywuOTUwMDEtLjgyOTk5LS4wNzAwMS0yLjMyMDAxLTEuMTY5OTgtMS43MzAwMS03LjAxMDAxLDMuNzgtMTYuNjksNi45MjAwMS0yOS40ODAwMSw2LjkyMDAxLTI0LjU0MDAxLDAtNDEuOTQtMTguNTEwMDEtNDEuOTQtMTguNTEwMDF2LS4wMDk5OFoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0xNDkuOTk4NDksMzkuNTMyOTdjLTI3LjgyOTk5LDAtNTMuMjM5OTksMTAuMy03Mi42NiwyNy4yOS0uOTQuODIwMDEuMDksMi4zMSwxLjE5LDEuNzEwMDEsNy4wMTk5OS0zLjc4OTk5LDE2LjcyLTYuOTUsMjkuNTQwMDEtNi45NSwyNS43Mzk5OSwwLDQxLjkyOTk5LDE4LjUsNDEuOTI5OTksMTguNWw2Mi4yNjk5OSw2Mi4yN2M0LjIxMDAyLDQuMjEwMDEsNC4yMTk5NywxMS4wMzk5OS4wMjAwMiwxNS4yNTk5OWw0NS40MTk5OCwxNi44M2MxLjc4MDAzLTcuODcsMi43NS0xNi4wNDAwMSwyLjc1LTI0LjQ1LDAtNjEuMDA5OTktNDkuNDYwMDItMTEwLjQ2LTExMC40NTk5OS0xMTAuNDZ2LS4wMDAwMloiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04Ny41OTg1LDE0Mi41MjI5OWwuMDczODYtLjA3NTU0LDQ5LjkwMTU1LTQ5Ljk1MzJzLTE2LjE2OTU1LTE4LjQ2NjY1LTQxLjg3NzA0LTE4LjQ2NjY1Yy02MC42MTMzNSwwLTU2LjAzOTE1LDgwLjk5NzU4LTU2LjAzOTE1LDgwLjk5NzU4Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjEyLjI4OTUsMTU3LjYxMDU4bC0uMDczODYuMDc1NTQtNDkuOTA3MTMsNDkuOTQ1ODhzMTYuMTY5NTUsMTguNDY2NjUsNDEuODc3MDQsMTguNDY2NjVjNjAuNjEzMzUsMCw1Ni4wMzkxNS04MC45OTc1OCw1Ni4wMzkxNS04MC45OTc1OCIvPgo8L3N2Zz4=");}
+.stone-logo.simbolo.verde-escuro{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQtMik7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQpOwogICAgICB9CgogICAgICAuY2xzLTMgewogICAgICAgIGZpbGw6ICMwMDQ2MWU7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhci1ncmFkaWVudCIgeDE9Ii05MjI0Ljg5MTA2IiB5MT0iNDU0MC4xMDkwNCIgeDI9Ii05MTY4Ljc3MTIiIHkyPSI0NTk2LjIyODkxIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKC05MTA3Ljk3OTk2IC00NDY3Ljk1MDIpIHJvdGF0ZSgtMTgwKSBzY2FsZSgxIC0xKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4wNDkxNyIgc3RvcC1jb2xvcj0iIzAwNDYxZSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjI0Mjk1IiBzdG9wLWNvbG9yPSIjMDA0NjFlIiBzdG9wLW9wYWNpdHk9Ii4zMjI5NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii41ODA2OCIgc3RvcC1jb2xvcj0iIzAwNDYxZSIgc3RvcC1vcGFjaXR5PSIuODEzNTEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNzYzNTYiIHN0b3AtY29sb3I9IiMwMDQ2MWUiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhci1ncmFkaWVudC0yIiB4MT0iLTEyMzI2LjkwMTQ1IiB5MT0iNTA4MC45Njk3MiIgeDI9Ii0xMjI3MS42ODEyNSIgeTI9IjUxMzYuMTg5OTMiIGdyYWRpZW50VHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI1MDkuODc1OTkgNTMwOC45NDAzNCkgc2NhbGUoMSAtMSkiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIuMDQ5MTciIHN0b3AtY29sb3I9IiMwMDQ2MWUiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4yNDIxNCIgc3RvcC1jb2xvcj0iIzAwNDYxZSIgc3RvcC1vcGFjaXR5PSIuMzIyOTQiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNTc4NDYiIHN0b3AtY29sb3I9IiMwMDQ2MWUiIHN0b3Atb3BhY2l0eT0iLjgxMzUxIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjc2MDU3IiBzdG9wLWNvbG9yPSIjMDA0NjFlIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0xNDkuOTk4NDksMjE5LjkxMjk4bC02Mi4yNjk5OS02Mi4yN2MtNC4xNzAwMS00LjE3LTQuMjAwMDEtMTAuODktLjEzLTE1LjEybC00NS44NTk5OS0xNC41M2MtMi4wNiwxMC4xOS0yLjczMDAxLDIwLjg5LTEuNzYwMDEsMzEuODksNC43Mzk5OSw1My45Nyw0OC44MzAwMiw5Ni45NTk5OSwxMDIuODk5OTksMTAwLjM1OTk5LDMwLjU3MDAxLDEuOTIwMDEsNTguNjYtOC42Miw3OS43MDk5OS0yNywuOTUwMDEtLjgyOTk5LS4wNzAwMS0yLjMyMDAxLTEuMTY5OTgtMS43MzAwMS03LjAxMDAxLDMuNzgtMTYuNjksNi45MjAwMS0yOS40ODAwMSw2LjkyMDAxLTI0LjU0MDAxLDAtNDEuOTQtMTguNTEwMDEtNDEuOTQtMTguNTEwMDF2LS4wMDk5OFoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0xNDkuOTk4NDksMzkuNTMyOTdjLTI3LjgyOTk5LDAtNTMuMjM5OTksMTAuMy03Mi42NiwyNy4yOS0uOTQuODIwMDEuMDksMi4zMSwxLjE5LDEuNzEwMDEsNy4wMTk5OS0zLjc4OTk5LDE2LjcyLTYuOTUsMjkuNTQwMDEtNi45NSwyNS43Mzk5OSwwLDQxLjkyOTk5LDE4LjUsNDEuOTI5OTksMTguNWw2Mi4yNjk5OSw2Mi4yN2M0LjIxMDAyLDQuMjEwMDEsNC4yMTk5NywxMS4wMzk5OS4wMjAwMiwxNS4yNTk5OWw0NS40MTk5OCwxNi44M2MxLjc4MDAzLTcuODcsMi43NS0xNi4wNDAwMSwyLjc1LTI0LjQ1LDAtNjEuMDA5OTktNDkuNDYwMDItMTEwLjQ2LTExMC40NTk5OS0xMTAuNDZ2LS4wMDAwMloiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik04Ny41OTg1LDE0Mi41MjI5OWwuMDczODYtLjA3NTU0LDQ5LjkwMTU1LTQ5Ljk1MzJzLTE2LjE2OTU1LTE4LjQ2NjY1LTQxLjg3NzA0LTE4LjQ2NjY1Yy02MC42MTMzNSwwLTU2LjAzOTE1LDgwLjk5NzU4LTU2LjAzOTE1LDgwLjk5NzU4Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjEyLjI4OTUsMTU3LjYxMDU4bC0uMDczODYuMDc1NTQtNDkuOTA3MTMsNDkuOTQ1ODhzMTYuMTY5NTUsMTguNDY2NjUsNDEuODc3MDQsMTguNDY2NjVjNjAuNjEzMzUsMCw1Ni4wMzkxNS04MC45OTc1OCw1Ni4wMzkxNS04MC45OTc1OCIvPgo8L3N2Zz4=");}
+.stone-logo.simbolo.branco{background-image:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQtMik7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogdXJsKCNsaW5lYXItZ3JhZGllbnQpOwogICAgICB9CgogICAgICAuY2xzLTMgewogICAgICAgIGZpbGw6ICNmNWZmZjU7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImxpbmVhci1ncmFkaWVudCIgeDE9Ii05MjI0Ljg5MTA2IiB5MT0iNDU0MC4xMDkwNCIgeDI9Ii05MTY4Ljc3MTIiIHkyPSI0NTk2LjIyODkxIiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNsYXRlKC05MTA3Ljk3OTk2IC00NDY3Ljk1MDIpIHJvdGF0ZSgtMTgwKSBzY2FsZSgxIC0xKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4wNDkxNyIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjIyNDAyIiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii4yOTI0NyIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii40MTg3NSIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIuNTkyNTMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNTgwMDUiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjgxMjcyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjY5OTMzIiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii45NDg2NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii43NjM1NiIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50LTIiIHgxPSItMTIzMjYuOTAxNDUiIHkxPSI1MDgwLjk2OTcyIiB4Mj0iLTEyMjcxLjY4MTI1IiB5Mj0iNTEzNi4xODk5MyIgZ3JhZGllbnRUcmFuc2Zvcm09InRyYW5zbGF0ZSgxMjUwOS44NzU5OSA1MzA4Ljk0MDM0KSBzY2FsZSgxIC0xKSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8c3RvcCBvZmZzZXQ9Ii4wNDkxNyIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjIyMzI5IiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii4yOTI0NyIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii40MTcyMSIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIgc3RvcC1vcGFjaXR5PSIuNTkyNTMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIuNTc3ODMiIHN0b3AtY29sb3I9IiNmNWZmZjUiIHN0b3Atb3BhY2l0eT0iLjgxMjcyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iLjY5NjYxIiBzdG9wLWNvbG9yPSIjZjVmZmY1IiBzdG9wLW9wYWNpdHk9Ii45NDg2NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ii43NjA1NyIgc3RvcC1jb2xvcj0iI2Y1ZmZmNSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMTQ5Ljk5ODQ5LDIxOS45MTI5OGwtNjIuMjY5OTktNjIuMjdjLTQuMTcwMDEtNC4xNy00LjIwMDAxLTEwLjg5LS4xMy0xNS4xMmwtNDUuODU5OTktMTQuNTNjLTIuMDYsMTAuMTktMi43MzAwMSwyMC44OS0xLjc2MDAxLDMxLjg5LDQuNzM5OTksNTMuOTcsNDguODMwMDIsOTYuOTU5OTksMTAyLjg5OTk5LDEwMC4zNTk5OSwzMC41NzAwMSwxLjkyMDAxLDU4LjY2LTguNjIsNzkuNzA5OTktMjcsLjk1MDAxLS44Mjk5OS0uMDcwMDEtMi4zMjAwMS0xLjE2OTk4LTEuNzMwMDEtNy4wMTAwMSwzLjc4LTE2LjY5LDYuOTIwMDEtMjkuNDgwMDEsNi45MjAwMS0yNC41NDAwMSwwLTQxLjk0LTE4LjUxMDAxLTQxLjk0LTE4LjUxMDAxdi0uMDA5OThaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMTQ5Ljk5ODQ5LDM5LjUzMjk3Yy0yNy44Mjk5OSwwLTUzLjIzOTk5LDEwLjMtNzIuNjYsMjcuMjktLjk0LjgyMDAxLjA5LDIuMzEsMS4xOSwxLjcxMDAxLDcuMDE5OTktMy43ODk5OSwxNi43Mi02Ljk1LDI5LjU0MDAxLTYuOTUsMjUuNzM5OTksMCw0MS45Mjk5OSwxOC41LDQxLjkyOTk5LDE4LjVsNjIuMjY5OTksNjIuMjdjNC4yMTAwMiw0LjIxMDAxLDQuMjE5OTcsMTEuMDM5OTkuMDIwMDIsMTUuMjU5OTlsNDUuNDE5OTgsMTYuODNjMS43ODAwMy03Ljg3LDIuNzUtMTYuMDQwMDEsMi43NS0yNC40NSwwLTYxLjAwOTk5LTQ5LjQ2MDAyLTExMC40Ni0xMTAuNDU5OTktMTEwLjQ2di0uMDAwMDJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNODcuNTk4NSwxNDIuNTIyOTlsLjA3Mzg2LS4wNzU1NCw0OS45MDE1NS00OS45NTMycy0xNi4xNjk1NS0xOC40NjY2NS00MS44NzcwNC0xOC40NjY2NWMtNjAuNjEzMzUsMC01Ni4wMzkxNSw4MC45OTc1OC01Ni4wMzkxNSw4MC45OTc1OCIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTIxMi4yODk1LDE1Ny42MTA1OGwtLjA3Mzg2LjA3NTU0LTQ5LjkwNzEzLDQ5Ljk0NTg4czE2LjE2OTU1LDE4LjQ2NjY1LDQxLjg3NzA0LDE4LjQ2NjY1YzYwLjYxMzM1LDAsNTYuMDM5MTUtODAuOTk3NTgsNTYuMDM5MTUtODAuOTk3NTgiLz4KPC9zdmc+");}
+/* STONE-LOGOS:END */
+    .stone-symbol{ width: 28px; height: 28px; }
+
+    /* ======================================================================
+       HEADER FINO PADRÃO (slides de conteúdo)
+       ====================================================================== */
+    .slide-header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 2px solid currentColor;
+      flex: 0 0 auto;
+    }
+    .slide-header .ano{ font-weight: 700; font-size: .9rem; letter-spacing: .04em; }
+    .slide-header .titulo-apresentacao{ font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .slide-header .stone-symbol{ width: 28px; height: 28px; }
+
+    .slide-body{ flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+
+    /* ======================================================================
+       CARDS / NOTCH (ENTALHE)
+       ====================================================================== */
+    .card{
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    .has-notch{ position: relative; }
+    .has-notch::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(120px, 26%, 320px);
+      height: clamp(28px, 6%, 56px);
+      background: var(--notch-color, var(--verde-escuro));
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+    }
+
+    /* ======================================================================
+       BALÃO COM RABICHO (.speech)
+       ====================================================================== */
+    .speech{
+      position: relative;
+      display: inline-block;
+      background: var(--verde-principal);
+      color: var(--verde-escuro);
+      border-radius: var(--radius);
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+    }
+    .speech::after{
+      content: "";
+      position: absolute;
+      bottom: -22px;
+      left: 48px;
+      width: 0;
+      height: 0;
+      border-left: 0 solid transparent;
+      border-right: 36px solid transparent;
+      border-top: 32px solid var(--verde-principal);
+    }
+
+    /* ======================================================================
+       CAPA
+       ====================================================================== */
+    .capa-logo{ line-height: 0; }
+    .capa-logo .stone-logo{ height: clamp(2.25rem, 4.5vw, 3.5rem); }
+    .capa-meta{ display: flex; gap: 2rem; flex-wrap: wrap; font-weight: 700; justify-content: space-between; }
+    .capa-data{ font-weight: 800; font-size: clamp(1rem, 1.5vw, 1.35rem); letter-spacing: .08em; }
+
+    /* ======================================================================
+       ÍNDICE NUMERADO
+       ====================================================================== */
+    .indice-lista{ list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .indice-lista li{ display: flex; align-items: center; gap: 1.25rem; font-size: clamp(1.2rem, 2vw, 1.75rem); font-weight: 700; }
+    .indice-num{
+      flex: 0 0 auto;
+      width: 2.6em; height: 2.6em;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: .8em; font-weight: 800;
+      background: var(--verde-principal);
+      color: var(--verde-escuro);
+    }
+    .bg-escuro .indice-num{ background: var(--verde-claro); }
+    .bg-branco .indice-num{ background: var(--verde-claro); }
+
+    /* ======================================================================
+       3 COLUNAS
+       ====================================================================== */
+    .colunas{ display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 2.5vw, 2.25rem); }
+    .colunas .col h3{ font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-weight: 800; margin-bottom: .6rem; line-height: 1.1; }
+    .colunas .col p{ font-size: clamp(.95rem, 1.15vw, 1.15rem); line-height: 1.4; }
+
+    /* ======================================================================
+       CONTEÚDO TEXTO
+       ====================================================================== */
+    .texto-paragrafos{ display: flex; flex-direction: column; gap: 1.1rem; max-width: 70ch; }
+
+    .bullets{ list-style: none; display: flex; flex-direction: column; gap: .8rem; }
+    .bullets li{ position: relative; padding-left: 1.7rem; font-size: clamp(1rem, 1.3vw, 1.35rem); line-height: 1.4; }
+    .bullets li::before{
+      content: ""; position: absolute; left: 0; top: .48em;
+      width: .62rem; height: .62rem; border-radius: 50%;
+      background: var(--verde-claro);
+    }
+    .bg-claro .bullets li::before, .bg-branco .bullets li::before{ background: var(--verde-principal); }
+    .bg-principal .bullets li::before{ background: var(--verde-escuro); }
+
+    .citacao{
+      border-left: 6px solid var(--verde-principal);
+      padding-left: clamp(1rem, 1.8vw, 1.6rem);
+      font-size: clamp(1.02rem, 1.45vw, 1.45rem);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    .bg-escuro .citacao{ border-left-color: var(--verde-claro); }
+    .bg-principal .citacao{ border-left-color: var(--verde-escuro); }
+
+    .fonte{ font-size: clamp(.72rem, .92vw, .88rem); font-weight: 600; opacity: .78; line-height: 1.35; }
+
+    .card-verde{ background: var(--verde-principal); color: var(--verde-escuro); }
+    .card-verde2{ background: var(--verde-escuro2); color: var(--branco); }
+    .card-claro{ background: var(--verde-claro); color: var(--verde-escuro); }
+    .card-escuro{ background: var(--verde-escuro); color: var(--branco); }
+    .bg-escuro .card-escuro{ background: var(--verde-escuro2); }
+
+    .duplo{ display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.25rem, 2.5vw, 2rem); align-items: stretch; }
+    .duplo .card h3{ font-size: clamp(1.2rem, 1.7vw, 1.55rem); font-weight: 800; margin-bottom: .5rem; }
+    .duplo .card p{ font-size: clamp(.95rem, 1.12vw, 1.12rem); line-height: 1.4; }
+
+    /* ======================================================================
+       DASHBOARD DE MÉTRICAS
+       ====================================================================== */
+    .dashboard{ display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(1.25rem, 2.5vw, 2rem); height: 100%; }
+    .dashboard-main{ display: flex; flex-direction: column; justify-content: center; }
+    .metric-cards{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+    .metric-card{
+      background: var(--verde-principal);
+      color: var(--verde-escuro);
+      border-radius: 24px;
+      padding: 1.1rem 1.25rem;
+    }
+    .metric-card .v{ font-size: clamp(1.4rem, 2.6vw, 2.2rem); font-weight: 800; display: flex; align-items: baseline; gap: .25rem; line-height: 1.05; }
+    .metric-card .l{ font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    .metric-card .l.long{ text-transform: none; letter-spacing: 0; font-size: clamp(.78rem,.95vw,.95rem); line-height: 1.25; font-weight: 600; margin-top: .35rem; }
+    .metric-card .v.sm{ font-size: clamp(1rem, 1.7vw, 1.4rem); }
+    .arrow-up{ color: var(--verde-claro); font-weight: 800; }
+    .dashboard-side{
+      background: var(--verde-escuro);
+      color: var(--branco);
+      border-radius: var(--radius);
+      padding: clamp(1.25rem, 2.5vw, 2rem);
+      display: flex; flex-direction: column; justify-content: center; gap: 1rem;
+    }
+    .bg-escuro .dashboard-side{ background: var(--verde-escuro2); }
+    .dashboard-side .mes{ display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .6rem; border-bottom: 1px solid rgba(255,255,255,.18); }
+    .dashboard-side .mes b{ font-size: clamp(1.1rem, 1.7vw, 1.5rem); font-weight: 800; color: var(--verde-claro); text-align: right; }
+    .dashboard-side .mes span{ font-size: clamp(.85rem, 1.05vw, 1.05rem); font-weight: 600; }
+    .dashboard-side .nota{ font-size: clamp(.78rem,.98vw,.95rem); line-height: 1.4; opacity: .9; }
+    .dashboard-side .big{ font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 800; line-height: 1; letter-spacing: -.02em; color: var(--verde-claro); }
+
+    /* ======================================================================
+       TIMELINE
+       ====================================================================== */
+    .timeline{ display: flex; flex-direction: column; gap: .9rem; margin-top: 1rem; }
+    .timeline-axis{ display: flex; justify-content: space-between; font-weight: 700; font-size: .85rem; opacity: .85; padding-bottom: .5rem; border-bottom: 2px solid currentColor; }
+    .timeline-row{ display: flex; align-items: center; gap: 1rem; }
+    .timeline-row .lbl{ flex: 0 0 4.5rem; font-weight: 800; font-size: clamp(.95rem,1.2vw,1.2rem); }
+    .timeline-row .txt{ flex: 1 1 auto; font-size: clamp(.85rem,1.05vw,1.05rem); line-height: 1.3; }
+    .timeline-bar{ height: 10px; border-radius: 999px; flex: 0 0 auto; }
+    .t1{ width: 10%; background: var(--verde-claro); }
+    .t2{ width: 18%; background: var(--verde-principal); }
+    .t3{ width: 28%; background: var(--verde-claro); }
+    .t4{ width: 40%; background: var(--verde-principal); }
+    .t5{ width: 54%; background: var(--verde-claro); }
+    .t6{ width: 68%; background: var(--verde-principal); }
+
+    /* ======================================================================
+       4 TÓPICOS — blocos de tons alternados, encaixados com leve recorte
+       ====================================================================== */
+    .topicos4{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: .5rem; }
+    .topicos4 .top{
+      padding: clamp(1.25rem, 2.2vw, 2rem);
+      border-radius: 30px;
+      display: flex; flex-direction: column; gap: .55rem;
+      position: relative;
+      min-height: clamp(170px, 32vh, 250px);
+    }
+    .topicos4 .top:not(:last-child){ padding-right: clamp(2rem, 3.2vw, 3.2rem); }
+    .topicos4 .top + .top{ margin-left: clamp(-28px, -1.9vw, -14px); }
+    .topicos4 .top:nth-child(1){ z-index: 1; }
+    .topicos4 .top:nth-child(2){ z-index: 2; }
+    .topicos4 .top:nth-child(3){ z-index: 3; }
+    .topicos4 .top:nth-child(4){ z-index: 4; }
+    .topicos4 .top .n{ font-size: .78rem; font-weight: 800; letter-spacing: .14em; opacity: .7; }
+    .topicos4 .top h3{ font-size: clamp(1.05rem, 1.5vw, 1.4rem); font-weight: 800; line-height: 1.1; }
+    .topicos4 .top p{ font-size: clamp(.82rem, 1.02vw, 1.02rem); line-height: 1.35; }
+
+    .topicos4--light .top:nth-child(1){ background: var(--verde-escuro);    color: var(--branco); }
+    .topicos4--light .top:nth-child(2){ background: var(--verde-escuro2);   color: var(--branco); }
+    .topicos4--light .top:nth-child(3){ background: var(--verde-principal); color: var(--verde-escuro); }
+    .topicos4--light .top:nth-child(4){ background: var(--verde-claro);     color: var(--verde-escuro); }
+
+    .topicos4--dark .top:nth-child(1){ background: var(--branco);           color: var(--verde-escuro); }
+    .topicos4--dark .top:nth-child(2){ background: var(--verde-claro);      color: var(--verde-escuro); }
+    .topicos4--dark .top:nth-child(3){ background: var(--verde-principal);  color: var(--verde-escuro); }
+    .topicos4--dark .top:nth-child(4){ background: var(--verde-escuro2);    color: var(--branco); }
+
+    .topico-lateral{
+      margin-top: clamp(.7rem, 1.4vw, 1.25rem);
+      border-radius: 26px;
+      padding: clamp(.9rem, 1.6vw, 1.4rem) clamp(1.25rem, 2.2vw, 2rem);
+      display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.75rem);
+      background: var(--verde-claro); color: var(--verde-escuro);
+    }
+    .topico-lateral .n{ font-size: .78rem; font-weight: 800; letter-spacing: .14em; opacity: .7; flex: 0 0 auto; }
+    .topico-lateral h3{ font-size: clamp(1.05rem, 1.4vw, 1.3rem); font-weight: 800; flex: 0 0 auto; }
+    .topico-lateral p{ font-size: clamp(.85rem, 1.05vw, 1.05rem); }
+
+    /* ======================================================================
+       FOCO PROGRESSIVO — trilho + marcador deslizante
+       ====================================================================== */
+    .foco{ display: flex; flex-direction: column; gap: clamp(1.5rem, 3vw, 2.5rem); }
+    .foco-trilho{ position: relative; height: 10px; border-radius: 999px; background: rgba(0,70,30,.14); }
+    .bg-escuro .foco-trilho{ background: rgba(135,255,75,.22); }
+    .foco-trilho .stop{
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--verde-escuro2);
+    }
+    .bg-escuro .foco-trilho .stop{ background: var(--verde-claro); }
+    .foco-trilho .marcador{
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--verde-principal);
+      box-shadow: 0 0 0 7px rgba(0,215,0,.22);
+    }
+    .foco-cols{ display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.25rem, 2.5vw, 2rem); }
+    .foco-col{ display: flex; flex-direction: column; gap: .6rem; padding: clamp(1.25rem, 2.2vw, 1.9rem); border-radius: 26px; min-height: clamp(130px, 24vh, 200px); }
+    .foco-col .tag{ font-size: .74rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .foco-col h3{ font-size: clamp(1.4rem, 2.4vw, 2.2rem); font-weight: 800; line-height: 1.05; }
+    .foco-col.esmaecido{ background: rgba(0,70,30,.06); color: rgba(0,70,30,.45); }
+    .foco-col.esmaecido h3{ color: rgba(0,70,30,.5); }
+    .foco-col.destaque{ background: var(--verde-principal); color: var(--verde-escuro); }
+
+    /* ======================================================================
+       DASHBOARD CARDS — grade de cards com mini-gráfico
+       ====================================================================== */
+    .cards8{
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: clamp(.7rem, 1.3vw, 1.1rem);
+      flex: 1 1 auto; min-height: 0;
+    }
+    .dcard{
+      border-radius: 26px;
+      padding: clamp(.85rem, 1.5vw, 1.35rem);
+      display: flex; flex-direction: column; gap: .45rem;
+      min-height: 0; overflow: hidden;
+    }
+    .dcard-tt{ font-size: clamp(.9rem, 1.15vw, 1.1rem); font-weight: 800; letter-spacing: -.01em; }
+    .dcard-spark{ width: 100%; height: clamp(18px, 3.2vh, 30px); display: block; opacity: .85; }
+    .dcard-vals{ display: flex; flex-direction: column; gap: .3rem; margin-top: auto; }
+    .dv{ display: flex; flex-direction: column; }
+    .dv-k{ font-size: .58rem; font-weight: 800; letter-spacing: .14em; opacity: .65; }
+    .dv-v{ font-size: clamp(.7rem, .92vw, .9rem); font-weight: 600; line-height: 1.2; }
+    .dv.dv-s1 .dv-v{ font-weight: 800; }
+
+    /* ======================================================================
+       BLOCOS DE CÓDIGO
+       ====================================================================== */
+    .code{
+      font-family: var(--font-mono);
+      font-size: clamp(.76rem, 1.12vw, 1rem);
+      line-height: 1.5;
+      background: var(--verde-escuro);
+      color: var(--verde-claro);
+      border-radius: 24px;
+      padding: clamp(1rem, 1.9vw, 1.6rem) clamp(1.1rem, 2vw, 1.9rem);
+      white-space: pre;
+      overflow: auto;
+      margin: 0;
+      tab-size: 4;
+      -webkit-font-smoothing: antialiased;
+    }
+    .bg-escuro .code{ background: rgba(255,255,255,.09); color: var(--verde-claro); }
+    .code .cm{ color: rgba(135,255,75,.62); font-style: italic; }
+    .code .st{ color: var(--branco); }
+    .code-wrap{ flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+    /* slides com bloco de código: margens mais enxutas pra caber o bloco inteiro */
+    .slide--dense{ padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 3.5vw, 3rem); }
+    .slide--dense .slide-header{ padding-bottom: .85rem; margin-bottom: 1rem; }
+    .split-code{ display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(1.25rem, 2.6vw, 2.4rem); flex: 1 1 auto; min-height: 0; }
+    .split-code .lead{ display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
+
+    /* ======================================================================
+       REFERÊNCIAS
+       ====================================================================== */
+    .refs{ list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: .7rem 2.25rem; }
+    .refs li{ position: relative; padding-left: 1.15rem; font-size: clamp(.78rem, 1vw, .98rem); line-height: 1.35; }
+    .refs li::before{ content: ""; position: absolute; left: 0; top: .5em; width: .42rem; height: .42rem; border-radius: 50%; background: var(--verde-claro); }
+    .bg-claro .refs li::before, .bg-branco .refs li::before{ background: var(--verde-principal); }
+
+    /* ======================================================================
+       PLACEHOLDERS VISÍVEIS (preenchimento pelo instrutor)
+       ====================================================================== */
+    .ph{
+      font-style: italic;
+      opacity: .72;
+      border-bottom: 1.5px dashed currentColor;
+      padding-bottom: 1px;
+    }
+    .numero-gigante .ph, .numero-medio .ph{ border-bottom-width: 3px; }
+
+    /* ======================================================================
+       ENCERRAMENTO
+       ====================================================================== */
+    .contatos{ list-style: none; display: flex; flex-direction: column; gap: .5rem; font-size: clamp(1rem, 1.5vw, 1.3rem); font-weight: 700; }
+
+    .frase-aspas{ position: relative; }
+
+    /* ======================================================================
+       CONTROLES DE NAVEGAÇÃO
+       ====================================================================== */
+    .nav-zone{
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 18%;
+      z-index: 30;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+    }
+    .nav-zone.left{ left: 0; }
+    .nav-zone.right{ right: 0; }
+
+    .nav-btns{
+      position: fixed;
+      bottom: 18px; right: 22px;
+      display: flex; gap: 8px;
+      z-index: 40;
+    }
+    .nav-btns button{
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--verde-principal);
+      background: rgba(0,70,30,.55);
+      color: var(--verde-claro);
+      font-size: 1.1rem; cursor: pointer;
+      display: grid; place-items: center;
+      transition: background .2s, transform .15s;
+    }
+    .nav-btns button:hover{ background: var(--verde-escuro2); transform: translateY(-2px); }
+
+    .page-indicator{
+      position: fixed;
+      bottom: 22px; left: 22px;
+      z-index: 40;
+      font-size: .85rem; font-weight: 700;
+      letter-spacing: .05em;
+      color: var(--verde-claro);
+      background: rgba(0,70,30,.55);
+      padding: 6px 14px; border-radius: 999px;
+    }
+
+    .hint{
+      position: fixed;
+      bottom: 22px; left: 50%; transform: translateX(-50%);
+      z-index: 40;
+      font-size: .72rem; font-weight: 600; letter-spacing: .05em;
+      color: var(--verde-claro);
+      opacity: .65;
+    }
+
+    /* ======================================================================
+       ACESSIBILIDADE — REDUCED MOTION
+       ====================================================================== */
+    @media (prefers-reduced-motion: reduce){
+      .slide{ transition: none; }
+      .nav-btns button{ transition: none; }
+    }
+
+    /* ======================================================================
+       IMPRESSÃO / EXPORT PDF
+       ====================================================================== */
+    @media print{
+      @page{ size: A4 landscape; margin: 0; }
+
+      body{ overflow: visible; display: block; background: var(--branco); }
+      .deck{ width: 100%; height: auto; }
+
+      .slide{
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        width: 100%;
+        height: 100vh;
+        page-break-after: always;
+        break-after: page;
+        aspect-ratio: auto;
+        transition: none;
+      }
+      .slide:last-child{ page-break-after: auto; }
+
+      .nav-zone, .nav-btns, .page-indicator, .hint{ display: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="deck" id="deck">
+
+    <!-- layout: capa -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. Card de capa com NOTCH no topo. -->
+    <section class="slide active bg-principal has-notch" style="--notch-color: var(--verde-escuro); justify-content: space-between;">
+      <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;">
+        <span class="stone-logo logotipo verde-escuro" role="img" aria-label="Stone" style="display:inline-block;height:clamp(2.25rem,4.5vw,3.5rem);"></span>
+        <span class="capa-data">OUT 26</span>
+      </header>
+      <div class="slide-body" style="justify-content: center;">
+        <p class="kicker" style="margin-bottom:1rem;">Minicurso · 22 de outubro de 2026</p>
+        <h1 class="titulo-massivo">Modelos de IA<br>do tipo &ldquo;Sistema 1&rdquo;</h1>
+        <p class="subtitulo" style="margin-top:1.5rem;">Decisões rápidas e estruturadas</p>
+      </div>
+      <p class="kicker">STONE · SECCOM UFSC</p>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Quem está falando</h2>
+        <ul class="bullets">
+          <li><strong>José Lacerda</strong> — Staff AI Engineer, Stone</li>
+          <li>A Stone é patrocinadora da SECCOM 2026.</li>
+          <li>Hoje a gente vai construir, do zero, um jeito diferente de usar IA pra decidir.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: indice-numerado -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">O que vamos ver?</h2>
+        <ol class="indice-lista">
+          <li><span class="indice-num">1</span> Dois jeitos de pensar</li>
+          <li><span class="indice-num">2</span> Como um LLM pensa</li>
+          <li><span class="indice-num">3</span> Anatomia de um modelo Sistema 1</li>
+          <li><span class="indice-num">4</span> LLM vs Sistema 1</li>
+          <li><span class="indice-num">5</span> Mão na massa</li>
+          <li><span class="indice-num">6</span> Para levar pra casa</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- layout: frase-destaque -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. Mensagem-âncora (1ª aparição). -->
+    <section class="slide bg-principal">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <p class="kicker" style="margin-bottom:1.5rem;">Mensagem-âncora</p>
+        <blockquote class="titulo-massivo frase-aspas">&ldquo;Nem toda decisão precisa de um LLM.&rdquo;</blockquote>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Capítulo 01</p>
+      <h2 class="titulo-capitulo">1. Dois jeitos<br>de pensar</h2>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A metáfora dos dois sistemas</h2>
+        <ul class="bullets">
+          <li>Daniel Kahneman, <em>Thinking, Fast and Slow</em> (2011).</li>
+          <li><strong>Sistema 1</strong> — rápido, automático, frequente, emocional, inconsciente.</li>
+          <li><strong>Sistema 2</strong> — lento, esforçado, infrequente, lógico, calculista, consciente.</li>
+          <li>Kahneman tratava os dois como personagens úteis, não como partes literais do cérebro.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: 3-colunas -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Sistema 1 · Sistema 2 · IA</h2>
+        <div class="colunas">
+          <div class="col">
+            <h3>Sistema 1</h3>
+            <p>Responde na hora. Reconhecer um rosto, ler um outdoor, 2+2.</p>
+          </div>
+          <div class="col">
+            <h3>Sistema 2</h3>
+            <p>Para e calcula. Multiplicar 17×24, comparar duas propostas.</p>
+          </div>
+          <div class="col">
+            <h3>Por que isso importa pra IA</h3>
+            <p>A mesma pergunta reaparece quando a máquina precisa decidir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: foco-progressivo -->
+    <!-- Fundo: BRANCO -> texto escuro. Um tópico em destaque, os outros esmaecidos. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Exemplos do dia a dia</h2>
+        <div class="foco">
+          <div class="foco-trilho">
+            <span class="stop" style="left:16.66%;"></span>
+            <span class="stop" style="left:50%;"></span>
+            <span class="stop" style="left:83.33%;"></span>
+            <span class="marcador" style="left:83.33%;"></span>
+          </div>
+          <div class="foco-cols">
+            <div class="foco-col esmaecido">
+              <span class="tag">Sistema 1</span>
+              <h3>2 + 2</h3>
+            </div>
+            <div class="foco-col esmaecido">
+              <span class="tag">Sistema 1</span>
+              <h3>Ler um outdoor</h3>
+            </div>
+            <div class="foco-col destaque">
+              <span class="tag">Sistema 2</span>
+              <h3>Multiplicar 17 × 24</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Antes de seguir: é metáfora</h2>
+        <ul class="bullets">
+          <li>&ldquo;Sistema 1&rdquo; não é uma arquitetura nem um tipo de rede neural.</li>
+          <li>É um enquadramento conceitual, importado da psicologia cognitiva pra descrever dois regimes de decisão.</li>
+          <li>A teoria do processo dual é mais antiga e mais ampla que Kahneman — ele é a porta de entrada mais conhecida.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A dicotomia chega à IA</h2>
+        <p class="corpo" style="margin-bottom:1.5rem;">LeCun, Bengio &amp; Hinton, &ldquo;Deep Learning for AI&rdquo;, <em>Communications of the ACM</em>, 2021.</p>
+        <blockquote class="citacao">&ldquo;Current deep learning is most successful at perception tasks and generally what are called system 1 tasks. Using deep learning for system 2 tasks that require a deliberate sequence of steps is an exciting area that is still in its infancy.&rdquo;</blockquote>
+      </div>
+    </section>
+
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Um Transformer com dois modos</h2>
+        <ul class="bullets">
+          <li><strong>Dualformer</strong> (Meta AI, 2024).</li>
+          <li>Um único Transformer que alterna entre modo rápido (só a resposta) e modo lento (cadeia de raciocínio + resposta), além de um modo automático.</li>
+          <li>A dicotomia deixa de ser metáfora e vira mecanismo de treino.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A dicotomia aplicada a LLMs</h2>
+        <p class="corpo" style="margin-bottom:1.35rem;">Brady et al., &ldquo;Dual-process theory and decision-making in large language models&rdquo;, <em>Nature Reviews Psychology</em>, 2025.</p>
+        <ul class="bullets">
+          <li>LLMs imitam respostas do tipo Sistema 1 (heurísticas, vieses) e do tipo Sistema 2 (raciocínio passo a passo), conforme o prompt.</li>
+          <li>Mas o raciocínio não é análogo ao humano: os vieses refletem o treino, e há vieses que humanos não têm — alucinação, por exemplo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: frase-destaque -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. -->
+    <section class="slide bg-principal">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <blockquote class="titulo-massivo--sm frase-aspas">&ldquo;System 2&rdquo; virou o rótulo dos modelos de raciocínio.</blockquote>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Capítulo 02</p>
+      <h2 class="titulo-capitulo">2. Como um<br>LLM pensa</h2>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Do zero: o que é um LLM</h2>
+        <ul class="bullets">
+          <li>Recebe texto, devolve texto.</li>
+          <li>Foi treinado para prever o próximo pedaço de texto — o próximo token — dado tudo que veio antes.</li>
+          <li>Não tem banco de dados nem regra de negócio dentro dele. Tem uma função que estima a continuação mais provável.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: 3-colunas -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Três engrenagens</h2>
+        <div class="colunas">
+          <div class="col">
+            <h3>Tokens</h3>
+            <p>O texto é fatiado em pedaços. Cada pedaço vira um número.</p>
+          </div>
+          <div class="col">
+            <h3>Atenção</h3>
+            <p>Cada token olha para os outros e decide o que importa no contexto.</p>
+          </div>
+          <div class="col">
+            <h3>Próximo token</h3>
+            <p>O modelo produz uma distribuição de probabilidade sobre o próximo pedaço.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Um token por vez</h2>
+        <ul class="bullets">
+          <li>A geração é sequencial: o modelo escreve um token, esse token volta pra entrada, e ele escreve o próximo.</li>
+          <li>Uma resposta de 300 tokens são 300 passagens pelo modelo, encadeadas.</li>
+          <li>É daí que vêm a latência e o custo de saída.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Por isso um LLM parece Sistema 2</h2>
+        <ul class="bullets">
+          <li><strong>É lento por construção</strong>: cada token custa uma passada.</li>
+          <li><strong>É deliberado</strong>: o raciocínio acontece na cadeia de tokens, não antes dela.</li>
+          <li><strong>É caro</strong>: você paga por token gerado.</li>
+          <li><strong>É flexível</strong>: o espaço de saída é texto livre — e é justamente aí que mora o problema.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: dashboard-metricas -->
+    <!-- Fundo: BRANCO -> texto escuro. Número em destaque + cards + bloco lateral escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.25rem;">O custo de decidir com texto</h2>
+        <div class="dashboard">
+          <div class="dashboard-main">
+            <p class="kicker" style="margin-bottom:.5rem;">Entrada · modelos pequenos de fronteira</p>
+            <div class="numero-medio" style="font-size:clamp(2rem,4.4vw,3.6rem);">US$ 0,05 – 0,15</div>
+            <div class="metric-cards" style="grid-template-columns:repeat(2,1fr);">
+              <div class="metric-card">
+                <div class="v">~5×</div>
+                <div class="l long">o preço da saída em relação à entrada</div>
+              </div>
+              <div class="metric-card">
+                <div class="v" style="font-size:clamp(1.3rem,2.2vw,1.9rem);">3 s – 329 s</div>
+                <div class="l long">faixa de latência ponta a ponta citada para modelos de fronteira</div>
+              </div>
+            </div>
+          </div>
+          <aside class="dashboard-side">
+            <p class="kicker" style="color:var(--verde-claro);">Nota de rodapé</p>
+            <p class="nota">Preços públicos de tabela, consultados em outubro de 2026. Mudam toda semana.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: 4-topicos -->
+    <!-- Fundo: ESCURO -> blocos em tons alternados, encaixados com leve recorte. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">Cinco dores de usar um LLM pra decidir</h2>
+        <div class="topicos4 topicos4--dark">
+          <div class="top">
+            <span class="n">01</span>
+            <h3>Custo</h3>
+            <p>você paga por token, inclusive quando a resposta é &ldquo;sim&rdquo;.</p>
+          </div>
+          <div class="top">
+            <span class="n">02</span>
+            <h3>Latência</h3>
+            <p>segundos, não milissegundos.</p>
+          </div>
+          <div class="top">
+            <span class="n">03</span>
+            <h3>Não-determinismo</h3>
+            <p>a mesma entrada pode dar saídas diferentes.</p>
+          </div>
+          <div class="top">
+            <span class="n">04</span>
+            <h3>Alucinação</h3>
+            <p>texto livre permite inventar.</p>
+          </div>
+        </div>
+        <div class="topico-lateral">
+          <span class="n">05</span>
+          <h3>Avaliação</h3>
+          <p>medir qualidade de texto livre é difícil e caro.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A mesma pergunta, respostas diferentes</h2>
+        <ul class="bullets">
+          <li>Mesmo com temperatura 0, a inferência de LLMs não é determinística.</li>
+          <li>O motivo é de engenharia: a ordem das somas em ponto flutuante depende do tamanho do lote e da forma como o cálculo é paralelizado.</li>
+          <li>Resultado prático: reprodutibilidade exige trabalho extra.</li>
+        </ul>
+        <p class="fonte" style="margin-top:1.75rem;">Fonte: Thinking Machines Lab, &ldquo;Defeating Nondeterminism in LLM Inference&rdquo;, 2025.</p>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Duas consequências</h2>
+        <div class="duplo">
+          <div class="card card-verde2">
+            <h3>Alucinação</h3>
+            <p>como o modelo gera texto livre, ele pode afirmar algo falso com total fluência. É um problema estudado desde 2022 e ainda em aberto.</p>
+          </div>
+          <div class="card card-verde">
+            <h3>Avaliação</h3>
+            <p>não existe acurácia para texto livre. A indústria recorre a juízes automáticos e preferência humana — caro, lento e subjetivo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A pergunta que fica</h2>
+        <ul class="bullets">
+          <li>LLMs são extraordinários quando a resposta precisa ser texto.</li>
+          <li>Mas e quando a resposta precisa ser uma decisão?</li>
+          <li>&ldquo;É urgente?&rdquo; &nbsp; &ldquo;Qual time?&rdquo; &nbsp; &ldquo;Precisa de humano?&rdquo;</li>
+          <li>Pra isso, gerar texto é um caminho longo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Capítulo 03</p>
+      <h2 class="titulo-capitulo">3. Anatomia de um<br>modelo Sistema 1</h2>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">A inversão</h2>
+        <ul class="bullets">
+          <li>Um modelo Sistema 1 <strong>não gera texto</strong>.</li>
+          <li>Você envia um estado (o contexto, em texto) e uma ou mais perguntas tipadas.</li>
+          <li>Ele devolve respostas estruturadas, com a probabilidade de cada opção.</li>
+          <li>O espaço de saída é fechado: a resposta tem que ser uma das opções que você ofereceu.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: 3-colunas -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Três primitivas</h2>
+        <div class="colunas">
+          <div class="col">
+            <h3 class="mono">noul</h3>
+            <p>Sim ou não. &ldquo;Esta transação parece fraude?&rdquo; Devolve a probabilidade do sim.</p>
+          </div>
+          <div class="col">
+            <h3 class="mono">choice</h3>
+            <p>Escolha entre opções. &ldquo;Qual o motivo do contato?&rdquo; Devolve a opção e o mapa de probabilidades.</p>
+          </div>
+          <div class="col">
+            <h3 class="mono">score</h3>
+            <p>Nota. &ldquo;Qual a urgência?&rdquo; Devolve um valor na escala, com a legenda dos níveis.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">O que muda quando a saída é fechada</h2>
+        <ul class="bullets">
+          <li>Não há JSON livre pra gerar, validar ou parsear.</li>
+          <li>Não há como inventar uma opção que não existe.</li>
+          <li>A superfície de abuso encolhe: um texto malicioso dentro do estado não consegue fazer o modelo emitir instruções arbitrárias — ele só pode influenciar qual das opções é escolhida.</li>
+          <li>E o erro fica visível: se a probabilidade está baixa, você sabe que deve escalar pra um humano.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: frase-destaque -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. Mensagem-âncora (2ª aparição). -->
+    <section class="slide bg-principal">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <p class="kicker" style="margin-bottom:1.5rem;">Mensagem-âncora</p>
+        <blockquote class="titulo-massivo frase-aspas">&ldquo;Nem toda decisão precisa de um LLM.&rdquo;</blockquote>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">Como a decisão é calculada</h2>
+        <ul class="bullets">
+          <li>O estado e a pergunta viram uma única sequência, com marcadores: o lugar da pergunta e o fim de cada opção candidata.</li>
+          <li>O modelo lê essa sequência uma vez só — um único forward pass.</li>
+          <li>A cabeça de decisão compara a representação de cada opção com a da pergunta e pontua cada uma.</li>
+          <li>Um softmax transforma as pontuações em probabilidades que somam 1.</li>
+          <li>Uma temperatura, ajustada no treino, calibra essas probabilidades.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Probabilidade só é útil se for honesta</h2>
+        <ul class="bullets">
+          <li>Calibração quer dizer: quando o modelo diz 80%, ele acerta perto de 80% das vezes.</li>
+          <li>A temperatura é ajustada (<em>temperature scaling</em>) numa fatia de dados separada — que o treino nunca viu.</li>
+          <li>Métricas de avaliação: acurácia, Brier e NLL.</li>
+          <li>Com isso você define um corte: aceitar automaticamente acima de X, escalar pra humano abaixo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: 4-topicos -->
+    <!-- Fundo: BRANCO -> blocos em tons alternados, encaixados com leve recorte. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">As famílias que fazem isso</h2>
+        <div class="topicos4 topicos4--light">
+          <div class="top">
+            <span class="n">01</span>
+            <h3>Encoders</h3>
+            <p>modelos bidirecionais tipo BERT, especializados em classificar e extrair.</p>
+          </div>
+          <div class="top">
+            <span class="n">02</span>
+            <h3>SLMs</h3>
+            <p>modelos pequenos (100M a 5B) que rodam em GPU modesta ou até no dispositivo.</p>
+          </div>
+          <div class="top">
+            <span class="n">03</span>
+            <h3>Classificadores few-shot</h3>
+            <p>técnicas como SetFit: poucos exemplos por classe, sem prompt.</p>
+          </div>
+          <div class="top">
+            <span class="n">04</span>
+            <h3>Decision models</h3>
+            <p>a categoria nova: pergunta tipada entra, probabilidade calibrada sai.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">2026: a categoria ganha nome</h2>
+        <ul class="bullets">
+          <li>Em setembro de 2026, a TypeSafe lançou o <strong>Jev</strong>, se apresentando como o primeiro &ldquo;System One Model&rdquo;.</li>
+          <li>A proposta: decisões tipadas com probabilidades calibradas, sem gerar texto.</li>
+          <li>Em semanas, apareceu um ecossistema: Cloudflare Clef (aberto, Apache-2.0), Laya, Microsoft Decision 1, AWS Strands Decider.</li>
+          <li>Latências anunciadas ficam na casa das dezenas a centenas de milissegundos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Nota metodológica</h2>
+        <ul class="bullets">
+          <li>Os números de benchmark dessa categoria são publicados pelos próprios fornecedores.</li>
+          <li>Parte deles está sob contestação pública — inclusive alegações de comparação desfavorável entre concorrentes.</li>
+          <li>Neste minicurso, trate esses números como <em>claims</em> publicados, não como resultado independente verificado.</li>
+          <li>O que é sólido e verificável é a mecânica: saída fechada, um forward pass, probabilidade calibrada.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Como se avalia um modelo Sistema 1</h2>
+        <ul class="bullets">
+          <li><strong>Acurácia e F1</strong> — as métricas clássicas de classificação.</li>
+          <li><strong>Brier e NLL</strong> — o quão honestas são as probabilidades.</li>
+          <li>Sempre comparar com a classe majoritária: com dados desbalanceados, &ldquo;chutar sempre a mais comum&rdquo; já dá acurácia alta.</li>
+          <li><strong>Latência</strong> por decisão e <strong>custo</strong> por mil decisões.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Capítulo 04</p>
+      <h2 class="titulo-capitulo">4. LLM vs<br>Sistema 1</h2>
+    </section>
+
+    <!-- layout: dashboard-cards -->
+    <!-- Fundo: BRANCO -> texto escuro. Grade 4x2 de cards com mini-gráfico. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.25rem;">Oito dimensões</h2>
+        <div class="cards8">
+
+          <div class="dcard card-escuro">
+            <div class="dcard-tt">Latência</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,22 14,21 28,20 42,17 56,16 70,12 84,11 100,7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">segundos</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">milissegundos</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-verde2">
+            <div class="dcard-tt">Custo</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <rect x="6" y="14" width="9" height="12" rx="3" fill="currentColor" opacity=".4"/>
+              <rect x="22" y="9" width="9" height="17" rx="3" fill="currentColor" opacity=".55"/>
+              <rect x="38" y="12" width="9" height="14" rx="3" fill="currentColor" opacity=".4"/>
+              <rect x="54" y="5" width="9" height="21" rx="3" fill="currentColor" opacity=".7"/>
+              <rect x="70" y="16" width="9" height="10" rx="3" fill="currentColor" opacity=".4"/>
+              <rect x="86" y="11" width="9" height="15" rx="3" fill="currentColor" opacity=".55"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">por token gerado</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">uma passada</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-verde">
+            <div class="dcard-tt">Determinismo</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,13 12,7 24,18 36,9 48,20 60,6 72,16 84,10 100,19" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">não, nem com temperatura 0</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">saída tipada e reprodutível</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-claro">
+            <div class="dcard-tt">Alucinação</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,20 16,19 32,21 48,18 64,20 80,19 100,20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="0,8 16,12 32,6 48,14 64,9 80,15 100,7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".45" stroke-dasharray="5 5"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">risco inerente</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">estruturalmente restrita às opções</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-claro">
+            <div class="dcard-tt">Saída</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <rect x="4" y="8" width="56" height="10" rx="5" fill="currentColor" opacity=".45"/>
+              <rect x="4" y="21" width="26" height="4" rx="2" fill="currentColor" opacity=".7"/>
+              <rect x="36" y="21" width="26" height="4" rx="2" fill="currentColor" opacity=".35"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">texto livre</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">valor tipado</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-verde">
+            <div class="dcard-tt">Prompt</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,6 20,9 40,5 60,12 80,8 100,14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="0,21 100,21" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">sensível a prompt</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">schema definido em código</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-verde2">
+            <div class="dcard-tt">Avaliação</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="xMinYMid meet" aria-hidden="true">
+              <circle cx="15" cy="13" r="9" fill="none" stroke="currentColor" stroke-width="4" opacity=".28"/>
+              <circle cx="15" cy="13" r="9" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="34 57" transform="rotate(-90 15 13)"/>
+              <polyline points="40,20 52,18 64,19 76,14 88,15 100,10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">juiz automático e preferência</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">acurácia, F1, calibração</span></div>
+            </div>
+          </div>
+
+          <div class="dcard card-escuro">
+            <div class="dcard-tt">Previsibilidade</div>
+            <svg class="dcard-spark" viewBox="0 0 100 26" preserveAspectRatio="none" aria-hidden="true">
+              <polyline points="0,20 14,13 28,17 42,8 56,14 70,6 84,12 100,5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="dcard-vals">
+              <div class="dv"><span class="dv-k">LLM</span><span class="dv-v">varia sob carga</span></div>
+              <div class="dv dv-s1"><span class="dv-k">SISTEMA 1</span><span class="dv-v">alta, sem geração token a token</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: 3-colunas -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Quando usar cada um</h2>
+        <div class="colunas">
+          <div class="col">
+            <h3>LLM</h3>
+            <p>Raciocínio aberto, geração, diálogo, uso de ferramentas, casos ambíguos que exigem explicação em texto.</p>
+          </div>
+          <div class="col">
+            <h3>Modelo Sistema 1</h3>
+            <p>Decidir rápido e estruturado: classificar, rotear, pontuar, priorizar, checar.</p>
+          </div>
+          <div class="col">
+            <h3>Os dois</h3>
+            <p>O modelo pequeno resolve o caso fácil; o LLM entra quando a decisão não é óbvia.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Mão na massa · 50 min</p>
+      <h2 class="titulo-capitulo">Mão na massa:<br>prototipando a triagem</h2>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Como funciona</h2>
+        <ul class="bullets">
+          <li>Notebook pronto, pra rodar no Google Colab — sem instalar nada na sua máquina.</li>
+          <li>Abra o link, faça uma cópia e rode célula por célula.</li>
+          <li>Link do notebook: <span class="ph">[preencher: link do Colab]</span></li>
+          <li>50 minutos. Ao final, você tem uma triagem de atendimento funcionando.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">O desafio</h2>
+        <ul class="bullets">
+          <li>Você recebe mensagens de clientes.</li>
+          <li>Pra cada uma, precisa decidir três coisas: <strong>é urgente? qual o assunto? precisa de humano?</strong></li>
+          <li>Sua missão: escrever o schema de decisão, rodar o modelo e ler as probabilidades.</li>
+          <li>No fim, comparar seu resultado com o do colega ao lado.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. Bloco de código (schema). -->
+    <section class="slide slide--dense bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <div class="split-code">
+          <div class="lead">
+            <p class="kicker">Mão na massa</p>
+            <h2 class="titulo-medio">O schema de decisão</h2>
+          </div>
+          <div class="code-wrap">
+            <pre class="code">questions = {
+    "urgente": {
+        "type": "noul",
+        "instructions": <span class="st">"Esta mensagem exige atenção imediata?"</span>,
+    },
+    "assunto": {
+        "type": "choice",
+        "instructions": <span class="st">"Qual o assunto mais provável?"</span>,
+        "criteria": {
+            "cobranca":  <span class="st">"cobrança indevida ou duplicada"</span>,
+            "fraude":    <span class="st">"suspeita de fraude"</span>,
+            "duvida":    <span class="st">"dúvida sobre o produto"</span>,
+            "cancelamento": <span class="st">"pedido de cancelamento"</span>,
+        },
+    },
+    "urgencia": {
+        "type": "score",
+        "instructions": <span class="st">"Qual o grau de urgência?"</span>,
+        "criteria": [<span class="st">"baixa"</span>, <span class="st">"media"</span>, <span class="st">"alta"</span>],
+    },
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:2rem;">Roda de resultados</h2>
+        <ul class="bullets" style="gap:1.35rem;">
+          <li style="font-size:clamp(1.3rem,2vw,1.9rem);font-weight:700;">O que funcionou?</li>
+          <li style="font-size:clamp(1.3rem,2vw,1.9rem);font-weight:700;">O que quebrou?</li>
+          <li style="font-size:clamp(1.3rem,2vw,1.9rem);font-weight:700;">Qual caso vocês não deixariam o robô decidir sozinho?</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: abertura-capitulo -->
+    <!-- Fundo: GRADIENTE -> texto escuro. -->
+    <section class="slide bg-gradiente" style="justify-content:center;">
+      <p class="kicker" style="margin-bottom:1rem;">Capítulo 05</p>
+      <h2 class="titulo-capitulo">5. Para levar<br>pra casa</h2>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">Kev: a versão aberta</h2>
+        <ul class="bullets">
+          <li>O <strong>Kev</strong> é uma família de modelos de decisão aberta, com licença Apache-2.0, construída sobre modelos Qwen.</li>
+          <li>Você pode treinar e rodar por conta própria — sem depender de API de terceiros.</li>
+          <li>Quatro tamanhos: 0.8B, 4B, 9B e 27B. O menor roda em qualquer GPU com 4 GB.</li>
+          <li>Mesma ideia: perguntas tipadas entram, probabilidades calibradas saem.</li>
+          <li>Repositório: <span class="mono">github.com/jaredpalmer/kev</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: CLARO -> texto escuro. -->
+    <section class="slide bg-claro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">Como o fine-tuning funciona</h2>
+        <ul class="bullets">
+          <li>Você não retreina o modelo inteiro.</li>
+          <li>Cada versão treinada é um adaptador <strong>LoRA</strong> (rank 16) mais uma pequena cabeça de decisão, sobre um backbone congelado.</li>
+          <li>O adaptador e a cabeça treinam juntos; o resto do modelo fica parado.</li>
+          <li>Seus dados vão em <strong>JSONL</strong>: um exemplo por linha, com o estado e o rótulo certo de cada pergunta.</li>
+          <li>O treino também calibra a temperatura nos seus dados.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: dashboard-metricas -->
+    <!-- Fundo: ESCURO -> texto branco/claro. Números do Kev. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.25rem;">O Kev em números</h2>
+        <div class="dashboard">
+          <div class="dashboard-main">
+            <p class="kicker" style="margin-bottom:.5rem; color:var(--verde-claro);">Custo de treino · Kev-4B numa H100</p>
+            <div class="numero-gigante">~US$ 1</div>
+            <div class="metric-cards" style="grid-template-columns:repeat(2,1fr);">
+              <div class="metric-card">
+                <div class="v">18,1 ms</div>
+                <div class="l long">seis perguntas numa H100 (41,5 ms numa L40S)</div>
+              </div>
+              <div class="metric-card">
+                <div class="v">8.192</div>
+                <div class="l long">tokens de contexto nas versões 0.8B, 4B e 9B</div>
+              </div>
+            </div>
+          </div>
+          <aside class="dashboard-side">
+            <p class="kicker" style="color:var(--verde-claro);">Versão 27B</p>
+            <div class="big">65.536</div>
+            <p class="nota">tokens de contexto na versão 27B</p>
+            <p class="nota" style="opacity:.7; border-top:1px solid rgba(255,255,255,.18); padding-top:.9rem;">Números publicados pelo próprio projeto.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: dashboard-metricas -->
+    <!-- Fundo: BRANCO -> texto escuro. Ganho do fine-tuning. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.25rem;">O ganho de treinar no seu domínio</h2>
+        <div class="dashboard">
+          <div class="dashboard-main">
+            <p class="kicker" style="margin-bottom:.5rem;">Acurácia no exemplo de suporte, depois do fine-tuning</p>
+            <div class="numero-medio" style="font-size:clamp(2rem,4.6vw,3.8rem);">67,7% <span style="color:var(--verde-escuro2);">→</span> 73,6%</div>
+            <div class="metric-cards">
+              <div class="metric-card">
+                <div class="v sm">34% → 48%</div>
+                <div class="l long">de decisões que passaram a ser automatizáveis</div>
+              </div>
+              <div class="metric-card">
+                <div class="v sm">0.804 → 0.904</div>
+                <div class="l long">em 5.219 reclamações financeiras rotuladas</div>
+              </div>
+              <div class="metric-card">
+                <div class="v sm">2,4%</div>
+                <div class="l long">de erros confiantes no Kev-9B</div>
+              </div>
+            </div>
+          </div>
+          <aside class="dashboard-side">
+            <p class="kicker" style="color:var(--verde-claro);">Nota</p>
+            <p class="nota">Números publicados pelo próprio projeto.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">Como isso aparece numa operação real</h2>
+        <p class="corpo" style="margin-bottom:1.25rem;">Numa operação em escala, a arquitetura que se desenha é esta:</p>
+        <ul class="bullets">
+          <li>Um modelo-base compartilhado e congelado, que ninguém retreina.</li>
+          <li>Uma cabeça pequena por domínio, treinada só com os exemplos daquele domínio.</li>
+          <li>Começa-se <em>zero-shot</em>: sem treinar nada, o modelo já responde. Só se treina uma cabeça quando o resultado não basta.</li>
+          <li>Um portão de qualidade antes de ir pra produção, com limites de acurácia e de calibração.</li>
+          <li>E probabilidade calibrada na ponta, pra decidir o que automatizar e o que escalar pra humano.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: frase-destaque -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. Mensagem-âncora (3ª aparição). -->
+    <section class="slide bg-principal">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body" style="justify-content:center;">
+        <p class="kicker" style="margin-bottom:1.5rem;">Mensagem-âncora</p>
+        <blockquote class="titulo-massivo frase-aspas">&ldquo;Nem toda decisão precisa de um LLM.&rdquo;</blockquote>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: BRANCO -> texto escuro. -->
+    <section class="slide bg-branco">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde-escuro stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.5rem;">O que levar pra casa</h2>
+        <ul class="bullets">
+          <li>Sistema 1 é um regime de decisão: rápido, estruturado, fechado.</li>
+          <li>Modelos Sistema 1 não geram texto — devolvem probabilidade sobre opções.</li>
+          <li>Saída fechada elimina parsing, reduz alucinação e encolhe a superfície de abuso.</li>
+          <li>Probabilidade só vale se for calibrada — e isso se mede.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: conteudo-texto -->
+    <!-- Fundo: ESCURO -> texto branco/claro. -->
+    <section class="slide bg-escuro">
+      <div class="slide-header">
+        <span class="ano">2026</span>
+        <span class="titulo-apresentacao">Modelos de IA do tipo Sistema 1</span>
+        <span class="stone-logo simbolo verde stone-symbol" role="img" aria-label="Stone"></span>
+      </div>
+      <div class="slide-body">
+        <h2 class="titulo-slide" style="margin-bottom:1.75rem;">Pra continuar</h2>
+        <ul class="refs">
+          <li>Kahneman, D. <em>Thinking, Fast and Slow</em>. 2011.</li>
+          <li>LeCun, Bengio &amp; Hinton. Deep Learning for AI. <em>Communications of the ACM</em>, 2021.</li>
+          <li>Su et al. Dualformer. Meta AI, 2024. arXiv:2410.09918</li>
+          <li>Brady et al. Dual-process theory and decision-making in LLMs. <em>Nature Reviews Psychology</em>, 2025.</li>
+          <li>Ong et al. RouteLLM. LMSYS, 2024. arXiv:2406.18665</li>
+          <li>Warner et al. ModernBERT. 2024. arXiv:2412.13663</li>
+          <li>Kev — <span class="mono">github.com/jaredpalmer/kev</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- layout: encerramento -->
+    <!-- Fundo: PRINCIPAL -> texto escuro. Obrigado + contatos + logotipo. -->
+    <section class="slide bg-principal" style="justify-content:center;">
+      <span class="stone-logo logotipo verde-escuro" role="img" aria-label="Stone" style="display:inline-block;height:clamp(2.25rem,4.5vw,3.5rem);margin-bottom:1.75rem;"></span>
+      <h2 class="titulo-massivo" style="margin-bottom:1.5rem;">Obrigado!</h2>
+      <ul class="contatos">
+        <li>José Lacerda — Staff AI Engineer, Stone</li>
+        <li><span class="ph">[preencher: e-mail]</span> · <span class="ph">[preencher: LinkedIn]</span></li>
+        <li>Notebook do minicurso: <span class="ph">[preencher: link do Colab]</span></li>
+      </ul>
+    </section>
+
+    <!-- Zonas de clique laterais (avançar/voltar) -->
+    <button class="nav-zone left"  aria-label="Slide anterior" data-nav="prev"></button>
+    <button class="nav-zone right" aria-label="Próximo slide"  data-nav="next"></button>
+  </div>
+
+  <!-- Controles discretos -->
+  <div class="page-indicator" id="pageIndicator">1 / 67</div>
+  <div class="hint">← → navegar · espaço avança · F tela cheia · Ctrl/⌘+P exportar PDF</div>
+  <div class="nav-btns">
+    <button id="btnPrev" aria-label="Anterior">‹</button>
+    <button id="btnNext" aria-label="Próximo">›</button>
+  </div>
+
+  <script>
+    /* ======================================================================
+       NAVEGAÇÃO
+       ====================================================================== */
+    (function(){
+      var slides    = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+      var indicator = document.getElementById('pageIndicator');
+      var total     = slides.length;
+      var current   = 0;
+
+      function render(){
+        slides.forEach(function(s, i){ s.classList.toggle('active', i === current); });
+        indicator.textContent = (current + 1) + ' / ' + total;
+      }
+      function go(n){
+        current = Math.max(0, Math.min(total - 1, n));
+        render();
+      }
+      function next(){ go(current + 1); }
+      function prev(){ go(current - 1); }
+
+      document.getElementById('btnNext').addEventListener('click', next);
+      document.getElementById('btnPrev').addEventListener('click', prev);
+      document.querySelectorAll('[data-nav]').forEach(function(el){
+        el.addEventListener('click', function(){ this.dataset.nav === 'next' ? next() : prev(); });
+      });
+
+      document.addEventListener('keydown', function(e){
+        switch(e.key){
+          case 'ArrowRight':
+          case ' ':
+          case 'PageDown':
+            e.preventDefault(); next(); break;
+          case 'ArrowLeft':
+          case 'PageUp':
+            e.preventDefault(); prev(); break;
+          case 'Home': go(0); break;
+          case 'End':  go(total - 1); break;
+          case 'f':
+          case 'F':
+            e.preventDefault();
+            if (!document.fullscreenElement) {
+              (document.documentElement.requestFullscreen || function(){}).call(document.documentElement);
+            } else {
+              (document.exitFullscreen || function(){}).call(document);
+            }
+            break;
+        }
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
