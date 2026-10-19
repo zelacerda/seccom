@@ -51,6 +51,8 @@ Você precisará de duas chaves:
 | `TYPESAFE_API_KEY` | <https://console.typesafe.ai/keys> |
 | `OPENAI_API_KEY` | <https://platform.openai.com/api-keys> |
 
+> 📌 **Observação:** duas **chaves temporárias** serão enviadas aos inscritos no minicurso, para uso **exclusivo da parte prática**. Ao final do minicurso, quem quiser continuar experimentando deverá usar **chaves pessoais**, geradas nos links acima.
+
 ### 3. Configure as variáveis de ambiente (Secrets do Colab)
 
 Ao abrir o notebook, **antes de executar qualquer célula**:
